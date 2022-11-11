@@ -22,9 +22,15 @@ def feather_terminal_phase(x, y, antibody='antibody'):
         for i in range(0, len(x)):
             if x[i] in terminal_time_points:
                 x_term.append(x[i])
-                y_term.append(y[i])
+                y_term.append(log_y[i])
  
-        slope, intercept, r_value, p_value, std_err = stats.linregress(x_term, y_term)
+        res = stats.linregress(x_term, y_term)
+        slope = res.slope
+        intercept = res.intercept
+        r_value = res.rvalue
+        p_value = res.pvalue
+        std_err = res.stderr
+        intercept_stderr = res.intercept_stderr
 
         b = np.exp(intercept)
         beta = -slope
@@ -34,7 +40,7 @@ def feather_terminal_phase(x, y, antibody='antibody'):
             best_adjusted_r2 = adjusted_r2
             best_parameters = [n, terminal_time_points, b, beta, np.log(2)/beta, r_value, r2, adjusted_r2 ]
 
-        print('{}, {}, {:.6f}, {:.6f}, {:.6f}, {:.6f}, {:.6f}, {:.6f}'.format(n, terminal_time_points, b, beta, np.log(2)/beta, r_value, r2, adjusted_r2))
+        print('{}, {:.6f}, {:.6f}, {:.6f}, {:.6f}, {:.6f}'.format(n, b, beta, np.log(2)/beta, r2, adjusted_r2))
 
     n, terminal_time_points, b, beta, halflife, r_value, r2, adjusted_r2 = best_parameters
     print('{} best Fit - n: {}, terminal time points: {}, b: {:.10f}, beta: {:.10f}, halflife: {:.6f}, adjusted r2: {:.6f}, r2: {:.6f}\n'.format(antibody, n, terminal_time_points, b, beta, halflife, adjusted_r2, r2))
