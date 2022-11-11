@@ -6,12 +6,10 @@ import numpy as np
 import pandas as pd
 
 def feather_terminal_phase(x, y, antibody='antibody'):
-    print('{}\n'.format(antibody))
+    print('{}\nn, b, beta, halflife, r, r2, adjusted r2'.format(antibody))
     log_y = np.log(y)
 
     unique_time_points = np.unique(np.array(x))
-
-    print('n, b, beta, halflife, r, r2')
 
     best_adjusted_r2 = 0.0
     best_parameters = []
@@ -33,9 +31,8 @@ def feather_terminal_phase(x, y, antibody='antibody'):
 
         print('{}, {:.6f}, {:.6f}, {:.6f}, {:.6f}, {:.6f}, {:.6f}'.format(n, b, beta, np.log(2)/beta, r_value, r2, adjusted_r2))
 
-    print('\n')
     n, b, beta, halflife, r_value, r2, adjusted_r2 = best_parameters
-    print('{} best Fit - n: {}, b: {:.6f}, beta: {:.6f}, halflife: {:.6f}, adjusted r2: {:.6f}, r2: {:.6f}'.format(antibody, n, b, beta, halflife, adjusted_r2, r2))
+    print('{} best Fit - n: {}, b: {:.6f}, beta: {:.6f}, halflife: {:.6f}, adjusted r2: {:.6f}, r2: {:.6f}\n'.format(antibody, n, b, beta, halflife, adjusted_r2, r2))
 
 def main():
     # Load the config file
