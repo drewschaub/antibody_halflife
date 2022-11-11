@@ -1,0 +1,9 @@
+name: antibody_halflife/.conda
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - pandas=1.5.1
+  - python=3.10.6
+  - scipy=1.9.3
+prefix: antibody_halflife/.conda
