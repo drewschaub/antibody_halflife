@@ -9,16 +9,21 @@ def feather_terminal_phase(x, y, antibody='antibody'):
     print('{}\nn, b, beta, halflife, r, r2, adjusted r2'.format(antibody))
     log_y = np.log(y)
 
-    unique_time_points = np.unique(np.array(x))
+    unique_time_points = sorted(np.unique(np.array(x)))
 
     best_adjusted_r2 = 0.0
     best_parameters = []
     for n in range(3, len(unique_time_points)+1):
-    # for n in range(3, 5):
-
-        x_term = x[-n:]
-        y_term = log_y[-n:]
+    
+        terminal_time_points = unique_time_points[-n:]
         
+        x_term = []
+        y_term = []
+        for i in range(0, len(x)):
+            if x[i] in terminal_time_points:
+                x_term.append(x[i])
+                y_term.append(y[i])
+ 
         slope, intercept, r_value, p_value, std_err = stats.linregress(x_term, y_term)
 
         b = np.exp(intercept)
@@ -27,12 +32,12 @@ def feather_terminal_phase(x, y, antibody='antibody'):
         adjusted_r2 = 1 - ( (1-r2)*(n-1) / (n-2)   )
         if adjusted_r2 > best_adjusted_r2:
             best_adjusted_r2 = adjusted_r2
-            best_parameters = [n, b, beta, np.log(2)/beta, r_value, r2, adjusted_r2 ]
+            best_parameters = [n, terminal_time_points, b, beta, np.log(2)/beta, r_value, r2, adjusted_r2 ]
 
-        print('{}, {:.6f}, {:.6f}, {:.6f}, {:.6f}, {:.6f}, {:.6f}'.format(n, b, beta, np.log(2)/beta, r_value, r2, adjusted_r2))
+        print('{}, {}, {:.6f}, {:.6f}, {:.6f}, {:.6f}, {:.6f}, {:.6f}'.format(n, terminal_time_points, b, beta, np.log(2)/beta, r_value, r2, adjusted_r2))
 
-    n, b, beta, halflife, r_value, r2, adjusted_r2 = best_parameters
-    print('{} best Fit - n: {}, b: {:.6f}, beta: {:.6f}, halflife: {:.6f}, adjusted r2: {:.6f}, r2: {:.6f}\n'.format(antibody, n, b, beta, halflife, adjusted_r2, r2))
+    n, terminal_time_points, b, beta, halflife, r_value, r2, adjusted_r2 = best_parameters
+    print('{} best Fit - n: {}, terminal time points: {}, b: {:.10f}, beta: {:.10f}, halflife: {:.6f}, adjusted r2: {:.6f}, r2: {:.6f}\n'.format(antibody, n, terminal_time_points, b, beta, halflife, adjusted_r2, r2))
 
 def main():
     # Load the config file
