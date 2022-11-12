@@ -1,3 +1,5 @@
+from scipy.optimize import curve_fit
+
 def get_twocompartment_model_params(X, y, alpha_phase_idx_list, beta_phase_idx_list, beta = 0, halflife = 0):
     """Fit missing values from two compartment model. The user provides
     idx values for the alpha phase and beta phase. Excluded timepoints
